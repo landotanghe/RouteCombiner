@@ -18,7 +18,7 @@ namespace RouteCombiner
             var combiner = new Combiner<Route>();
 
             var set1 = new[]{1, 2}.Select(x => new Route(x)).ToArray();
-            var set2 = new[]{3, 4, 5, 6}.Select(x => new Route(x)).ToArray();
+            var set2 = new[]{3, 4, 5}.Select(x => new Route(x)).ToArray();
 
             var combinations = combiner.GetCombinations(set1, set2);
             foreach(var combination in combinations){
@@ -35,11 +35,17 @@ namespace RouteCombiner
             }
         }
 
-        public class Route{
+        public class Route : IComparable<Route>{
             public Route(int id){
                 Id =id;
             }
+
             public int Id {get;set;}
+
+            public int CompareTo(Route other)
+            {
+                return Id - other.Id;
+            }
 
             public override string ToString(){
                 return Id.ToString();
