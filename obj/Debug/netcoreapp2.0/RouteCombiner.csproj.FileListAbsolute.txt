@@ -1,0 +1,10 @@
+/home/lando/Data/Documents/Projects/RouteCombiner/obj/Debug/netcoreapp2.0/RouteCombiner.csproj.CoreCompileInputs.cache
+/home/lando/Data/Documents/Projects/RouteCombiner/obj/Debug/netcoreapp2.0/RouteCombiner.AssemblyInfoInputs.cache
+/home/lando/Data/Documents/Projects/RouteCombiner/obj/Debug/netcoreapp2.0/RouteCombiner.AssemblyInfo.cs
+/home/lando/Data/Documents/Projects/RouteCombiner/bin/Debug/netcoreapp2.0/RouteCombiner.deps.json
+/home/lando/Data/Documents/Projects/RouteCombiner/bin/Debug/netcoreapp2.0/RouteCombiner.runtimeconfig.json
+/home/lando/Data/Documents/Projects/RouteCombiner/bin/Debug/netcoreapp2.0/RouteCombiner.runtimeconfig.dev.json
+/home/lando/Data/Documents/Projects/RouteCombiner/bin/Debug/netcoreapp2.0/RouteCombiner.dll
+/home/lando/Data/Documents/Projects/RouteCombiner/bin/Debug/netcoreapp2.0/RouteCombiner.pdb
+/home/lando/Data/Documents/Projects/RouteCombiner/obj/Debug/netcoreapp2.0/RouteCombiner.dll
+/home/lando/Data/Documents/Projects/RouteCombiner/obj/Debug/netcoreapp2.0/RouteCombiner.pdb
