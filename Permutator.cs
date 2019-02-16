@@ -5,60 +5,65 @@ using System.Linq;
 
 public class Permutator<T>{
     public List<Permutation<T>> Permutate(T[] original){
-        return PermutatePrefix(original, original.Length);
+        return GetPermutationsWithUniquePrefix(original, original.Length);
     }
 
-    public List<Permutation<T>> PermutatePrefix(T[] original, int prefixLength){
-        if(prefixLength <1){
-            throw new ArgumentException(nameof(prefixLength), "at least 1 element should be permutated");
+    /// <summary>
+    /// Create all permutations where the prefix is unique. The order of elements in the suffix is not guaranteed.
+    /// F.e. permutations of 123 (prefix 1) will result in 123, 213, 321. 
+    /// As the order is not guaranteed in the suffix 321, might also be returned as 312.
+    /// Note only the position of the elements are considered, not the values
+    /// F.e. permutations of 112 (prefix 2) will result in 112, 112, 211
+    /// </summary>
+    /// <param name="original"></param>
+    /// <param name="prefixLength"></param>
+    /// <returns></returns>
+    public List<Permutation<T>> GetPermutationsWithUniquePrefix(T[] original, int prefixLength){
+        if(prefixLength < 0){
+            throw new ArgumentException(nameof(prefixLength), "prefxLength can't be below 0");
         }
         if(prefixLength > original.Length){
             throw new ArgumentException(nameof(prefixLength), "prefixLength can't be longer than array length");
         }
 
+        // When prefixLength = 0, all permutations have the same prefix
         var permutations = new List<Permutation<T>>{
             new Permutation<T>{
                 Values= original.ToArray()
             }
         };
 
-        for(int currentPrefixLength = 2; currentPrefixLength <= prefixLength; currentPrefixLength++){
-            permutations = ExpandPermutation(permutations, original, currentPrefixLength);
+        for(int currentPrefixLength = 1; currentPrefixLength <= prefixLength; currentPrefixLength++){
+            permutations = ExpandPermutation(permutations, currentPrefixLength);
         }
 
         return permutations;
     }
 
+    private static List<Permutation<T>> ExpandPermutation(List<Permutation<T>> original, int prefixLength){
+        return original.SelectMany(o => ExpandPermutation(o, prefixLength)).ToList();
+    }
+
 
     /// <summary>
-    /// Starting from a set of permutations for prefixLength -1, generates a set of permutations for prefixLength
+    /// Create all permutations with the same prefixLength as the original
     /// </summary>
     /// <param name="original"></param>
-    /// <param name="prefixLength"></param>
+    /// <param name="prefixIndex"></param>
     /// <returns></returns>
-    private static List<Permutation<T>> ExpandPermutation(List<Permutation<T>> originalPermutations, T[] original, int prefixLength){
-        var prefixIndex = prefixLength -1;
-
-        //For prefixLength N, we already have N-1 original permutations
-        //For every original permutation we add N permutations with the Nth element inserted at every possible position in the original permutation
-        //F.e original permutation  123, N=4:
-        //new permutations for 123: 1234, 4123, 1423, 1243
-        //The same process will be repeated for all other original permutations (132, 213, 231, 312, 321)
-
-        var result = originalPermutations;
-        for(var indexToSwap = 0; indexToSwap < prefixIndex; indexToSwap++){
-            var clonedPermutations = originalPermutations.Select(p => new Permutation<T>{
-                Values = p.Values.ToArray()
-            }).ToArray();
-
-            foreach(var clone in clonedPermutations){
-                SwapElements(clone.Values, prefixIndex, indexToSwap);
-            }
-
-            result = result.Concat(clonedPermutations).ToList();
+    private static List<Permutation<T>> ExpandPermutation(Permutation<T> original, int prefixLength){
+        var permutations = new List<Permutation<T>>();
+        permutations.Add(original);
+        var lastIndexPrefix = prefixLength - 1;
+        for(int i = lastIndexPrefix + 1; i < original.Values.Length; i++){
+            var clonedValues = original.Values.ToArray();
+            SwapElements(clonedValues, i, lastIndexPrefix);
+            permutations.Add(new Permutation<T>{
+                Values = clonedValues
+            });
         }
 
-        return result;
+        return permutations;
     }
 
     private static void SwapElements<T>(T[] values, int index1, int index2){

@@ -6,7 +6,9 @@ public class CombinationSet<T> where T: class{
     public IEnumerable<Tuple<T,T>> Combinations{ get; set; }
 
     public override string ToString(){
-        var readableCombinations = Combinations.OrderBy(c => c.Item1).ThenBy(c => c.Item2).Select(c =>$"{PrettyPrint(c.Item1)}, {PrettyPrint(c.Item2)}");
+        var readableCombinations = Combinations
+        //.OrderBy(c => c.Item1).ThenBy(c => c.Item2)
+        .Select(c =>$"{PrettyPrint(c.Item1)}, {PrettyPrint(c.Item2)}");
         return string.Join("\r\n", readableCombinations);
     }
 

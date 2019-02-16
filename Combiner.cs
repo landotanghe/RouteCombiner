@@ -22,15 +22,16 @@ public class Combiner<T> where T : class{
 
         var permutationLength = set1.Length;
 
-        var rotatedVersionsSet1 = GetRotations(extendedSet1.ToArray());
-        var permutationsSet2 = new Permutator<T>().PermutatePrefix(extendedSet2.ToArray(), permutationLength);
-
+        // Combine extended set1 with every permutation of extended set2
+        // When there are lots of nulls (when set1 is much shorter than set2) there could be many equivalent permutations 
+        // F.e set1( 1, x, x) set2 (2, 3, 4) => 1,2 x,3 x,4 and equivalent 1,2 x,4 x,3
+        // (nulls are marked by x)
+        // We know that set1 is shorter or as long as set2. We will keep extended set1 unchanged, so nulls are always at the end.
         var combinationSets = new List<CombinationSet<T>>();
-        foreach(var r in rotatedVersionsSet1){
-            foreach(var p in permutationsSet2){
-                var combinationSet = CombineOneByOne(r, p.Values);
-                combinationSets.Add(combinationSet);
-            }
+        var permutationsSet2 = new Permutator<T>().GetPermutationsWithUniquePrefix(extendedSet2.ToArray(), permutationLength);
+        foreach(var p in permutationsSet2){
+            var combinationSet = CombineOneByOne(extendedSet1.ToArray(), p.Values);
+            combinationSets.Add(combinationSet);
         }
 
         return combinationSets;
