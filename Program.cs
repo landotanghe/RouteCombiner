@@ -9,22 +9,22 @@ namespace RouteCombiner
         {
             var permutator = new Permutator<int>();
 
-            var permutations = permutator.GetPermutationsWithUniquePrefix(new[]{1, 2, 3, 4, 5, 6}, 4);
-            foreach(var p in permutations){
+            var permutations = permutator.Permutate(new[] { 1, 2});
+
+            Console.WriteLine("Permutations before: ");
+            foreach (var p in permutations)
+            {
                 Console.WriteLine(p.ToString());
             }
 
-            Console.WriteLine("Combinations: ");
-            var combiner = new Combiner<Route>();
+            permutations = permutator.AddDuplicateElementsToPermutations(permutations, 0, 2);
 
-            var set1 = new[]{1, 2}.Select(x => new Route(x)).ToArray();
-            var set2 = new[]{3, 4, 5, 6}.Select(x => new Route(x)).ToArray();
-
-            var combinations = combiner.GetCombinations(set1, set2);
-            foreach(var combination in combinations){
-                Console.WriteLine("Combinations");
-                Console.WriteLine(combination);
+            Console.WriteLine("Permutations after: ");
+            foreach (var p in permutations)
+            {
+                Console.WriteLine(p.ToString());
             }
+            TestCombinations();
 
             // Console.WriteLine();
             // Console.WriteLine("Combinations: ");
@@ -33,6 +33,22 @@ namespace RouteCombiner
             //     Console.WriteLine("Combinations");
             //     Console.WriteLine(combination);
             // }
+        }
+
+        private static void TestCombinations()
+        {
+            Console.WriteLine("Combinations: ");
+            var combiner = new Combiner<Route>();
+
+            var set1 = new[] { 1, 2 }.Select(x => new Route(x)).ToArray();
+            var set2 = new[] { 3, 4, 5, 6 }.Select(x => new Route(x)).ToArray();
+
+            var combinations = combiner.GetCombinations(set1, set2);
+            foreach (var combination in combinations)
+            {
+                Console.WriteLine("Combinations");
+                Console.WriteLine(combination);
+            }
         }
 
         public class Route : IComparable<Route>{

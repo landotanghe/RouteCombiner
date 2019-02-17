@@ -10,13 +10,9 @@ public class Combiner<T> where T : class{
             return GetCombinations(set2, set1).Select(c => c.Invert()).ToList();
         }
 
-        // Create extended sets with both at least one null
-        // Make sure extended sets that are equally long, by pushing additional nulls
-        var extendedSet2 = set2.ToList();
-        extendedSet2.Add(default(T));
-
+        // Add enough nulls to each set so every element can be combined with null
         var extendedSet1 = set1.ToList();
-        while(extendedSet1.Count < extendedSet2.Count){
+        foreach(var element in set2){
             extendedSet1.Add(default(T));
         }
 
@@ -28,7 +24,8 @@ public class Combiner<T> where T : class{
         // (nulls are marked by x)
         // We know that set1 is shorter or as long as set2. We will keep extended set1 unchanged, so nulls are always at the end.
         var combinationSets = new List<CombinationSet<T>>();
-        var permutationsSet2 = new Permutator<T>().GetPermutationsWithUniquePrefix(extendedSet2.ToArray(), permutationLength);
+        var permutationsSet2 = new Permutator<T>().Permutate(set2);
+        permutationsSet2 = new Permutator<T>().AddDuplicateElementsToPermutations(permutationsSet2, default(T), set1.Length);
         foreach(var p in permutationsSet2){
             var combinationSet = CombineOneByOne(extendedSet1.ToArray(), p.Values);
             combinationSets.Add(combinationSet);
@@ -36,7 +33,6 @@ public class Combiner<T> where T : class{
 
         return combinationSets;
     }
-
 
     private List<T[]> GetRotations(T[] original)
     {
